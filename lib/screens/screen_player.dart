@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:like_button/like_button.dart';
+import 'package:music_player/mocks/mock_songs.dart';
 import 'package:music_player/values/constants.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class PlayerScreen extends StatefulWidget {
 
 class _PlayerScreenState extends State<PlayerScreen> {
   double deviceWidth = 0;
+  int currentPlayingIndex = 0; //The index of the current song
 
   @override
   Widget build(BuildContext context) {
@@ -48,26 +50,30 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Song Title',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.textColor(context),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            MockSongs.songs[currentPlayingIndex].title,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.textColor(context),
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Artist Name',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.textColor(context).withOpacity(0.3),
+                          Text(
+                            MockSongs.songs[currentPlayingIndex].artist,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  AppColor.textColor(context).withOpacity(0.3),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     //Animated icon
                     LikeButton(
@@ -117,7 +123,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     ),
                   ),
                   Text(
-                    '3:00',
+                    MockSongs.songs[currentPlayingIndex].duration,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -132,10 +138,22 @@ class _PlayerScreenState extends State<PlayerScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    AppAsset.svgPrev,
-                    height: 35,
-                    color: AppColor.primary.withOpacity(.3),
+                  GestureDetector(
+                    onTap: () {
+                      //
+                      if (currentPlayingIndex == 0) {
+                        //
+                        setState(() =>
+                            currentPlayingIndex = MockSongs.songs.length - 1);
+                      } else {
+                        setState(() => currentPlayingIndex--);
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      AppAsset.svgPrev,
+                      height: 35,
+                      color: AppColor.primary.withOpacity(.3),
+                    ),
                   ),
                   const SizedBox(width: 40),
                   SvgPicture.asset(
@@ -144,10 +162,21 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     color: AppColor.primary,
                   ),
                   const SizedBox(width: 40),
-                  SvgPicture.asset(
-                    AppAsset.svgNest,
-                    height: 35,
-                    color: AppColor.primary.withOpacity(.3),
+                  GestureDetector(
+                    onTap: () {
+                      //
+                      if (currentPlayingIndex == MockSongs.songs.length - 1) {
+                        //
+                        setState(() => currentPlayingIndex = 0);
+                      } else {
+                        setState(() => currentPlayingIndex++);
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      AppAsset.svgNest,
+                      height: 35,
+                      color: AppColor.primary.withOpacity(.3),
+                    ),
                   ),
                 ],
               ),
