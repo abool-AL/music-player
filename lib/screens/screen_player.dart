@@ -34,6 +34,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 decoration: BoxDecoration(
                   color: AppColor.primary,
                   borderRadius: BorderRadius.circular(35),
+                  image: DecorationImage(
+                      image: AssetImage('assets/img/' +
+                          MockSongs.songs[currentPlayingIndex].albumArt),
+                      fit: BoxFit.fill),
                   boxShadow: [
                     BoxShadow(
                       color: AppColor.primary.withOpacity(0.1),
