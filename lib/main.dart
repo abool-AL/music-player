@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:music_player/screens/screen_player.dart';
 
 void main() {
@@ -12,8 +13,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ROOAH Test',
       theme: ThemeData.light(),
       themeMode: ThemeMode.system,
       home: const PlayerScreen(),
