@@ -255,7 +255,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 ],
               ),
               //
-              const Spacer(),
+              const SizedBox(height: 70),
               //Show Live Broadcasting
               Row(
                 children: [
@@ -268,7 +268,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const Spacer(),
                   const Text(
                     'Live Broadcasting',
                     style: TextStyle(
