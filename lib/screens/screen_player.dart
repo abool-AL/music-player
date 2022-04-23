@@ -197,8 +197,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       //
+                      print(position.inSeconds);
+                      if (position.inSeconds > 2) {
+                        //Restart song
+                        await audioPlayer.stop();
+                        await audioPlayer.resume();
+                        return;
+                      }
+
                       if (currentPlayingIndex == 0) {
                         //
                         setState(() =>
@@ -217,16 +225,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   const SizedBox(width: 40),
                   GestureDetector(
                     onTap: () async {
-                      // if (isPlaying) {
-                      //   await audioPlayer.pause();
-                      // } else {
-                      //   String url =
-                      //       'https://luan.xyz/files/audio/ambient_c_motion.mp3';
-                      //   await audioPlayer.setUrl(url);
-                      //   // await audioPlayer.play(url);
-                      //   await audioPlayer.resume();
-                      // }
-
                       isPlaying
                           ? await audioPlayer.pause()
                           : await audioPlayer.resume();
@@ -240,7 +238,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   const SizedBox(width: 40),
                   GestureDetector(
                     onTap: () {
-                      //
                       if (currentPlayingIndex == MockSongs.songs.length - 1) {
                         //
                         setState(() => currentPlayingIndex = 0);
