@@ -1,6 +1,8 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:like_button/like_button.dart';
+import 'package:music_player/helpers/time_format.dart';
 import 'package:music_player/mocks/mock_songs.dart';
 import 'package:music_player/values/constants.dart';
 
@@ -12,8 +14,47 @@ class PlayerScreen extends StatefulWidget {
 }
 
 class _PlayerScreenState extends State<PlayerScreen> {
+  final audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+
   double deviceWidth = 0;
   int currentPlayingIndex = 0; //The index of the current song
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    setAudio();
+
+    audioPlayer.onPlayerStateChanged.listen((state) {
+      setState(() => isPlaying = state == PlayerState.PLAYING);
+    });
+
+    audioPlayer.onDurationChanged.listen((newDuration) {
+      setState(() => duration = newDuration);
+    });
+
+    audioPlayer.onAudioPositionChanged.listen((newPosition) {
+      setState(() => position = newPosition);
+    });
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
+  setAudio() async {
+    // Load song from assets folder
+    final player = AudioCache(prefix: 'assets/songs/');
+    final url = await player.load(MockSongs.songs[currentPlayingIndex].path);
+    print(url.path);
+    audioPlayer.setUrl(url.toString(), isLocal: true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,17 +150,25 @@ class _PlayerScreenState extends State<PlayerScreen> {
                   trackHeight: 8,
                 ),
                 child: Slider(
-                  value: 0.5,
+                  min: 0,
+                  max: duration.inSeconds.toDouble(),
+                  value: position.inSeconds.toDouble(),
                   activeColor: AppColor.primary,
                   thumbColor: AppColor.backgroundColor(context),
-                  onChanged: (value) {},
+                  onChanged: (value) async {
+                    final position = Duration(seconds: value.toInt());
+                    await audioPlayer.seek(position);
+
+                    //If audio was pausd, let's just resume playing
+                    await audioPlayer.resume();
+                  },
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '0:00',
+                    TimeFormartter.formatTime(position),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -127,7 +176,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     ),
                   ),
                   Text(
-                    MockSongs.songs[currentPlayingIndex].duration,
+                    TimeFormartter.formatTime(duration),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -152,6 +201,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       } else {
                         setState(() => currentPlayingIndex--);
                       }
+                      setAudio();
                     },
                     child: SvgPicture.asset(
                       AppAsset.svgPrev,
@@ -160,10 +210,27 @@ class _PlayerScreenState extends State<PlayerScreen> {
                     ),
                   ),
                   const SizedBox(width: 40),
-                  SvgPicture.asset(
-                    AppAsset.svgPlay,
-                    height: 50,
-                    color: AppColor.primary,
+                  GestureDetector(
+                    onTap: () async {
+                      // if (isPlaying) {
+                      //   await audioPlayer.pause();
+                      // } else {
+                      //   String url =
+                      //       'https://luan.xyz/files/audio/ambient_c_motion.mp3';
+                      //   await audioPlayer.setUrl(url);
+                      //   // await audioPlayer.play(url);
+                      //   await audioPlayer.resume();
+                      // }
+
+                      isPlaying
+                          ? await audioPlayer.pause()
+                          : await audioPlayer.resume();
+                    },
+                    child: SvgPicture.asset(
+                      isPlaying ? AppAsset.svgPause : AppAsset.svgPlay,
+                      height: 50,
+                      color: AppColor.primary,
+                    ),
                   ),
                   const SizedBox(width: 40),
                   GestureDetector(
@@ -175,6 +242,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
                       } else {
                         setState(() => currentPlayingIndex++);
                       }
+                      setAudio();
                     },
                     child: SvgPicture.asset(
                       AppAsset.svgNest,
