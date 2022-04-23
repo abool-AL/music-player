@@ -1,16 +1,13 @@
-# music_player
+# ROOAH Flutter developer test
 
-A new Flutter project.
+Dev: Abdulalim Ladan
 
-## Getting Started
+### Submission of test
 
-This project is a starting point for a Flutter application.
+## About the app
+The task assigned to me was to build a functional music player screen using static data, following a UI architecture that was sent to me.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Packages used 
+- flutter_svg: ^1.0.3 (For rendering external .svg icons in app)
+- like_button: ^2.0.4 (For animated like button)
+- audioplayers: ^0.20.1 (For playing audio files from Asset, Local File & URL in background)
