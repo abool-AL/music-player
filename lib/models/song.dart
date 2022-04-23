@@ -6,6 +6,7 @@ class Song {
   String albumArt;
   String duration;
   String path;
+  bool isLiked;
   String id;
 
   Song({
@@ -13,6 +14,7 @@ class Song {
     this.artist = 'unknown artist',
     this.album = 'unknown',
     this.albumArt = '',
+    this.isLiked = false,
     required this.duration,
     required this.path,
     required this.id,

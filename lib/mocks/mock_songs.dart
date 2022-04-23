@@ -8,6 +8,7 @@ class MockSongs {
         albumArt: 'arctic_monkeys.jpeg',
         duration: '4:33',
         path: 'song1.mp3',
+        isLiked: false,
         id: '1'),
     Song(
         title: 'The Best Day of My Life (Mp3goo.com)',
@@ -15,6 +16,7 @@ class MockSongs {
         albumArt: 'american_authors.jpeg',
         duration: '3:15',
         path: 'song2.mp3',
+        isLiked: false,
         id: '2'),
     Song(
         title: '02 Bad Luck',
@@ -22,6 +24,7 @@ class MockSongs {
         albumArt: 'khalid.png',
         duration: '3:51',
         path: 'song3.mp3',
+        isLiked: false,
         id: '3'),
   ];
 }

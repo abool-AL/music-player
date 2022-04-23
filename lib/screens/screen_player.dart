@@ -52,8 +52,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     // Load song from assets folder
     final player = AudioCache(prefix: 'assets/songs/');
     final url = await player.load(MockSongs.songs[currentPlayingIndex].path);
-    print(url.path);
-    audioPlayer.setUrl(url.toString(), isLocal: true);
+    audioPlayer.setUrl(url.path.toString(), isLocal: true);
   }
 
   @override
@@ -128,6 +127,12 @@ class _PlayerScreenState extends State<PlayerScreen> {
                         dotPrimaryColor: AppColor.primary,
                         dotSecondaryColor: AppColor.accent,
                       ),
+                      isLiked: MockSongs.songs[currentPlayingIndex].isLiked,
+                      onTap: (isLiked) async {
+                        MockSongs.songs[currentPlayingIndex].isLiked =
+                            !MockSongs.songs[currentPlayingIndex].isLiked;
+                        return !isLiked;
+                      },
                       likeBuilder: (bool isLiked) {
                         return Icon(
                           isLiked
